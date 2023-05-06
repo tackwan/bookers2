@@ -1,4 +1,4 @@
-class Book < ApplicationRecord 
+class Book < ApplicationRecord
   belongs_to :user
 
 
@@ -11,6 +11,20 @@ class Book < ApplicationRecord
       image.attach(io: File.open(file_path), filename: 'default-image.jpg', content_type: 'image/jpeg')
     else
       image
+    end
+  end
+
+  def self.looks(search, word)
+    if search == "perfect_match"
+      @book = Book.where("title LIKE?", "#{word}")
+    elsif search == "forward_match"
+      @book = Book.where("title LIKE?", "#{word}%")
+    elsif search == "backward_match"
+      @book = Book.where("title LIKE?", "%#{word}")
+    elsif search == "partial_match"
+      @book = Book.where("title LIKE?", "%#{word}%")
+    else
+      @book = Book.all
     end
   end
 end
